@@ -1,0 +1,59 @@
+import tkinter as tk
+import math
+
+def clear():
+    display.delete(0, tk.END)
+
+def click(event):
+    text = event.widget.cget("text")
+    if text == "=":
+        try:
+            result = eval(display.get())
+            clear()
+            display.insert(tk.END, result)
+        except Exception as e:
+            clear()
+            display.insert(tk.END, "Error")
+    elif text == "C":
+        clear()
+    elif text == "^":
+        display.insert(tk.END, "**")
+    elif text == "log":
+        display.insert(tk.END, "math.log(")
+    else:
+        display.insert(tk.END, text)
+
+root = tk.Tk()
+root.geometry("350x600")
+root.title("Scientific Calculator")
+
+display = tk.Entry(root, font=("Arial", 24), bd=5, relief=tk.GROOVE, justify=tk.RIGHT)
+display.grid(row=0, column=0, columnspan=4, pady=10, sticky="nsew")
+
+buttons = [
+    ("7", 1, 0), ("8", 1, 1), ("9", 1, 2), ("/", 1, 3),
+    ("4", 2, 0), ("5", 2, 1), ("6", 2, 2), ("*", 2, 3),
+    ("1", 3, 0), ("2", 3, 1), ("3", 3, 2), ("-", 3, 3),
+    ("C", 4, 0), ("0", 4, 1), ("=", 4, 2), ("+", 4, 3),
+    ("sin", 5, 0), ("cos", 5, 1), ("tan", 5, 2), ("(", 5, 3),
+    ("sin-1", 6, 0), ("cos-1", 6, 1), ("tan-1", 6, 2), (")", 6, 3),
+    ("log", 7, 0), (".", 7, 1), ("^", 7, 2)  # Added button for exponentiation
+]
+
+for text, row, col in buttons:
+    if text in ["sin", "cos", "tan", "sin-1", "cos-1", "tan-1"]:
+        button_color = "#4169E1"  # Royal Blue
+    elif text == "=":
+        button_color = "#32CD32"  # Lime Green
+    elif text == "C":
+        button_color = "#FF6347"  # Tomato Red
+    elif text == "log":
+        button_color = "#FFD700"  # Gold
+    else:
+        button_color = "#000000"  # Black
+    
+    button = tk.Button(root, text=text, font=("Arial", 18), padx=15, pady=10, bg=button_color, fg="white", bd=5, relief=tk.RAISED)
+    button.grid(row=row, column=col, padx=5, pady=5, sticky="nsew")
+    button.bind("<Button-1>", click)
+
+root.mainloop()
